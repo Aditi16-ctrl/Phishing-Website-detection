@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "repl-nix-flask-deployment"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "repl_nix_flask_deployment"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^3.0.3"
+numpy = "^1.26.4"
+requests = "^2.31.0"
+streamlit = "^1.33.0"
+joblib = "^1.4.0"
+scikit-learn = "^1.4.2"
+myfirstdemo2 = "^1.0.0"
+pandas = "^2.2.2"
+xgboost = "^2.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
