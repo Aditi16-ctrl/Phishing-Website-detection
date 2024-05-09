@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import numpy as np
 import pickle
 from urllib.parse import urlparse
@@ -15,11 +15,10 @@ app = Flask(__name__)
 
 
 def get_domain(url):
-  domain = urlparse(url).netloc
-  if re.match(r"^www.", domain):
-    domain = domain.replace("www.", "")
-  return domain
-
+    domain = urlparse(url).netloc
+    if re.match(r"^www.", domain):
+        domain = domain.replace("www.", "")
+    return domain
 
 def having_ip(url):
   try:
@@ -167,33 +166,39 @@ def get_http_response(url):
     logging.error(f"Error: {e}")
     return None
 
-
-# Define other helper functions here...
+# Define other helper functions...
 
 
 @app.route('/')
 def home():
-  return render_template('home.html')
+    return render_template('index.html')
 
 
 @app.route('/check', methods=['POST'])
 def check():
-  url = request.form.get('url')
-  if not url:
-    return "URL not provided."
+    url = request.form.get('url')
+    if not url:
+        return "URL not provided."
 
-  features = extract_features(url)
-  prediction = predict_phishing(features)
-  if prediction[0] == 0:
-    result = "Phishing Alert! This URL is classified as phishing."
-  elif prediction[0] == 1:
-    result = "No Phishing Detected. This URL seems safe."
-  else:
-    result = "Unexpected prediction value. Please check the model."
-  return result
+    features = extract_features(url)
+    prediction = predict_phishing(features)
+    if prediction[0] == 0:
+        result = "Phishing Alert! This URL is classified as phishing."
+    elif prediction[0] == 1:
+        result = "No Phishing Detected. This URL seems safe."
+    else:
+        result = "Unexpected prediction value. Please check the model."
+    return redirect(url_for('show_prediction', result=result))
+
+
+@app.route('/show_prediction')
+def show_prediction():
+    result = request.args.get('result')
+    return render_template('prediction.html', result=result)
 
 
 def extract_features(url):
+    # Function definition
   features = []
   features.append(having_ip(url))
   features.append(have_at_sign(url))
@@ -227,17 +232,16 @@ def extract_features(url):
   return features
 
 
+
 def predict_phishing(features):
-  # Load the model
-  with open("static/XGBoostClassifier.pickle.dat", 'rb') as file:
-    loaded_model = pickle.load(file)
+    # Function definition
+    with open("static/XGBoostClassifier.pickle.dat", 'rb') as file:
+        loaded_model = pickle.load(file)
 
   # Make predictions
-  new_data = np.array([features])
-  prediction = loaded_model.predict(new_data)
-
-  return prediction
-
+    new_data = np.array([features])
+    prediction = loaded_model.predict(new_data)
+    return prediction
 
 if __name__ == '__main__':
-  app.run(debug=True)
+    app.run(debug=True)

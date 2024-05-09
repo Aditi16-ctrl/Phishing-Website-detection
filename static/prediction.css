@@ -1,0 +1,40 @@
+body {
+    background: linear-gradient(to right, #2c3e50, #3498db);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding-top: 50px;
+    margin: 0; /* Add this line to remove default margin */
+}
+
+.container {
+    text-align: center;
+    height: 100vh; /* Set container height to fill the viewport */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.prediction-box {
+    
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.prediction-title {
+    display: inline-block;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.prediction-text {
+    display: inline-block;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.prediction-result {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+}
